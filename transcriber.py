@@ -6,7 +6,8 @@ import site
 def _setup_cuda_dll_paths():
     """Add nvidia package DLL dirs to PATH so cublas64_12.dll etc. are found."""
     try:
-        sp = site.getsitepackages() if hasattr(site, "getsitepackages") else [site.getusersitepackages()]
+        sp = site.getsitepackages() if hasattr(site, "getsitepackages") else []
+        sp.append(os.path.join(sys.prefix, "Lib", "site-packages"))  # venv fallback
         for p in sp:
             # Check the "nvidia" directory created by pip
             nvidia_dir = os.path.join(p, "nvidia")

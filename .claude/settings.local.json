@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(where cublas64_12.dll)",
+      "Bash(\"E:/Python Apps/voice typer/.venv311/Scripts/pip.exe\" install nvidia-cublas-cu12 nvidia-cudnn-cu12)",
+      "Bash(\"E:/Python Apps/voice typer/.venv311/Scripts/python.exe\" -m pip install nvidia-cublas-cu12 nvidia-cudnn-cu12)",
+      "Bash(py -3.11 -m pip install --target \"E:/Python Apps/voice typer/.venv311/Lib/site-packages\" nvidia-cublas-cu12 nvidia-cudnn-cu12)",
+      "Bash(\"E:/Python Apps/voice typer/.venv311/Scripts/python.exe\" --version)",
+      "Bash(\"E:/Python Apps/voice typer/.venv311/Scripts/python.exe\" -m ensurepip)",
+      "Bash(wmic logicaldisk get size,freespace,caption)",
+      "Bash(\"E:/Python Apps/voice typer/.venv311/Scripts/python.exe\" -c \":*)"
+    ]
+  }
+}

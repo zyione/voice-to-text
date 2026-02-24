@@ -6,6 +6,15 @@ import site
 def _setup_cuda_dll_paths():
     """Add nvidia package DLL dirs to PATH so cublas64_12.dll etc. are found."""
     try:
+        # Frozen EXE: PyInstaller puts all DLLs in sys._MEIPASS
+        if getattr(sys, 'frozen', False):
+            for d in {getattr(sys, '_MEIPASS', ''), os.path.dirname(sys.executable)}:
+                if d and os.path.isdir(d):
+                    os.environ["PATH"] = d + os.pathsep + os.environ.get("PATH", "")
+                    if sys.platform == "win32" and hasattr(os, "add_dll_directory"):
+                        os.add_dll_directory(d)
+            return
+
         sp = site.getsitepackages() if hasattr(site, "getsitepackages") else []
         sp.append(os.path.join(sys.prefix, "Lib", "site-packages"))  # venv fallback
         for p in sp:

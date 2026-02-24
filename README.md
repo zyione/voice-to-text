@@ -51,27 +51,63 @@ pip install -r requirements.txt
 
 ---
 
-## Usage
+## Running the app
 
-Start the background application:
+There are two ways to run Voice Typer. Use whichever fits your situation:
 
-```bash
-# If using the recommended uv setup on Windows:
-$env:HF_HOME="E:\hf_cache";.\.venv311\Scripts\python.exe main.py
+### Option A — Portable EXE (no Python required)
+
+Pre-built for Windows. Ideal for just using the app on any machine without a Python environment.
+
+1. Build it once (requires the venv set up above):
+
+```
+build\build.bat
 ```
 
-If you installed via standard `pip` into `.venv`, run:
+2. The output is at `dist\VoiceTyper\VoiceTyper.exe`. Double-click it to launch.
+3. Copy the entire `dist\VoiceTyper\` folder anywhere you like — another PC, a USB drive, etc. It is self-contained.
+
+> **Whisper models are not bundled.** On first launch the app will download the selected model (~150 MB for `base`) to your HuggingFace cache (`%USERPROFILE%\.cache\huggingface`). This only happens once.
+
+**Rebuilding after code changes:** just run `build\build.bat` again. PyInstaller reuses its cache so subsequent builds are faster.
+
+---
+
+### Option B — Run from Python (dev / power-user)
+
+Use this when you are actively editing code, debugging, or want to see console output.
 
 ```bash
+# Recommended (uv venv):
+$env:HF_HOME="E:\hf_cache"; .\.venv311\Scripts\python.exe main.py
+
+# Standard pip venv:
 .\.venv\Scripts\python.exe main.py
 ```
 
-1. Look in your system tray (bottom right on Windows) for the **blue recording icon** (🎤).
+---
+
+### Which should I use?
+
+| | EXE | Python |
+|---|---|---|
+| Just want to use the app | ✅ | works too |
+| Editing / debugging code | ✗ | ✅ |
+| Sharing with someone else | ✅ | requires Python setup |
+| See `print()` output | ✗ (no console) | ✅ |
+| Fastest iteration on changes | ✗ (rebuild needed) | ✅ |
+
+---
+
+Once the app is running:
+
+1. Look in your system tray (bottom right on Windows) for the **blue circle icon**.
 2. Set your cursor inside any text box in any program.
-3. Press the global recording hotkey (`ctrl+space` by default). The transparent microphone overlay will appear showing your voice volume!
+3. Press the global recording hotkey (`ctrl+space` by default). The transparent overlay will appear showing your voice level.
 4. Speak your dictation.
-5. Press `ctrl+space` again to stop recording. The system tray icon will turn yellow to indicate it's transcribing.
-6. A second later, the text will be magically typed into your active window.
+5. Press `ctrl+space` again to stop. The tray icon turns yellow while transcribing.
+6. A moment later the text is typed into your active window.
 
 ## Configuration & Settings
 

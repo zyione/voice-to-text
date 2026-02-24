@@ -1,8 +1,18 @@
 import json
 import os
+import sys
+
+def _resolve_config_path(filename):
+    """Return an absolute path for config next to the EXE (frozen) or script (dev)."""
+    if not os.path.isabs(filename):
+        base = os.path.dirname(sys.executable) if getattr(sys, 'frozen', False) \
+               else os.path.dirname(os.path.abspath(__file__))
+        return os.path.join(base, filename)
+    return filename
 
 class SettingsManager:
     def __init__(self, config_file="config.json"):
+        config_file = _resolve_config_path(config_file)
         self.config_file = config_file
         self.default_settings = {
             "hotkey": "<ctrl>+<space>",

@@ -8,7 +8,10 @@
       "Bash(\"E:/Python Apps/voice typer/.venv311/Scripts/python.exe\" --version)",
       "Bash(\"E:/Python Apps/voice typer/.venv311/Scripts/python.exe\" -m ensurepip)",
       "Bash(wmic logicaldisk get size,freespace,caption)",
-      "Bash(\"E:/Python Apps/voice typer/.venv311/Scripts/python.exe\" -c \":*)"
+      "Bash(\"E:/Python Apps/voice typer/.venv311/Scripts/python.exe\" -c \":*)",
+      "Bash(\"E:/Python Apps/voice typer/.venv311/Scripts/python.exe\" -m pip install pyinstaller)",
+      "Bash(.venv311/Scripts/python.exe -m pyinstaller build/VoiceTyper.spec --noconfirm --distpath dist --workpath build/work)",
+      "Bash(.venv311/Scripts/pyinstaller.exe build/VoiceTyper.spec --noconfirm --distpath dist --workpath build/work)"
     ]
   }
 }

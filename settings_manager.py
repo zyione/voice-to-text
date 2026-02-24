@@ -41,7 +41,14 @@ class SettingsManager:
             print(f"Error saving config: {e}")
 
     def get(self, key):
-        return self.settings.get(key, self.default_settings.get(key))
+        val = self.settings.get(key, self.default_settings.get(key))
+        if key == "hotkey" and isinstance(val, str):
+            # Translate pynput style keys to keyboard library style
+            val = val.replace("<ctrl>", "ctrl").replace("<shift>", "shift")
+            val = val.replace("<alt>", "alt").replace("<cmd>", "windows")
+            val = val.replace("<space>", "space").replace("<esc>", "esc").replace("<tab>", "tab")
+            val = val.replace("<enter>", "enter").replace("<backspace>", "backspace")
+        return val
 
     def set(self, key, value):
         self.settings[key] = value

@@ -1,0 +1,10 @@
+{
+    "hotkey": "ctrl+space",
+    "model_size": "base",
+    "device": "auto",
+    "compute_type": "default",
+    "custom_vocabulary": "",
+    "llm_prompt": "Fix spelling and grammar of the following text, outputting ONLY the corrected text:",
+    "use_llm": false,
+    "save_history": false
+}

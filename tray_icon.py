@@ -46,5 +46,10 @@ class TrayIcon:
             self.icon.icon = self.icon_idle
             self.icon.title = "Voice Typer (Idle)"
 
+    def notify_user(self, title, message):
+        """Show a system toast notification."""
+        if self.icon and self.icon.HAS_NOTIFICATION:
+            self.icon.notify(message, title)
+
     def run(self):
         self.icon.run()

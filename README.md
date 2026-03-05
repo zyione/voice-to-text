@@ -44,35 +44,25 @@ If using standard `pip`:
 ```bash
 python -m venv .venv
 .\.venv\Scripts\activate  # On Windows
-pip install -r requirements.txt
+pip install -r requirements.txt # if fail
+pip install --no-deps --no-cache-dir --upgrade -r requirements.txt
 ```
 
 > **Note on Windows C++ Build Tools**: If standard `pip` fails to install dependencies like `tokenizers` or `av`, make sure you have the [Microsoft C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) installed, or use **Python 3.11** with `uv` to pull down standard pre-compiled binaries effortlessly.
 
 ---
 
-## Running the app
+## Running the App
 
-There are two ways to run Voice Typer. Use whichever fits your situation:
+### Option A — Windows Installer (recommended for end users)
 
-### Option A — Portable EXE (no Python required)
+If you already have `VoiceTyperSetup.exe` (built by a developer, see [Building & Updating the Installer](#building--updating-the-installer) below):
 
-Pre-built for Windows. Ideal for just using the app on any machine without a Python environment.
-
-1. Build it once (requires the venv set up above):
-
-```
-build\build.bat
-```
-
-2. The output is at `dist\VoiceTyper\VoiceTyper.exe`. Double-click it to launch.
-3. Copy the entire `dist\VoiceTyper\` folder anywhere you like — another PC, a USB drive, etc. It is self-contained.
+1. Double-click `VoiceTyperSetup.exe`.
+2. Follow the setup wizard — choose an install location, tick shortcuts as desired, click **Install**.
+3. Launch **Voice Typer** from the Start Menu or Desktop shortcut.
 
 > **Whisper models are not bundled.** On first launch the app will download the selected model (~150 MB for `base`) to your HuggingFace cache (`%USERPROFILE%\.cache\huggingface`). This only happens once.
-
-**Rebuilding after code changes:** just run `build\build.bat` again. PyInstaller reuses its cache so subsequent builds are faster.
-
----
 
 ### Option B — Run from Python (dev / power-user)
 
@@ -86,17 +76,15 @@ $env:HF_HOME="E:\hf_cache"; .\.venv311\Scripts\python.exe main.py
 .\.venv\Scripts\python.exe main.py
 ```
 
----
-
 ### Which should I use?
 
-| | EXE | Python |
-|---|---|---|
-| Just want to use the app | ✅ | works too |
-| Editing / debugging code | ✗ | ✅ |
-| Sharing with someone else | ✅ | requires Python setup |
-| See `print()` output | ✗ (no console) | ✅ |
-| Fastest iteration on changes | ✗ (rebuild needed) | ✅ |
+|                              | Installer          | Python                |
+| ---------------------------- | ------------------ | --------------------- |
+| Just want to use the app     | ✅                 | works too             |
+| Editing / debugging code     | ✗                  | ✅                    |
+| Sharing with someone else    | ✅ (one file)      | requires Python setup |
+| See `print()` output         | ✗ (no console)     | ✅                    |
+| Fastest iteration on changes | ✗ (rebuild needed) | ✅                    |
 
 ---
 
@@ -108,6 +96,77 @@ Once the app is running:
 4. Speak your dictation.
 5. Press `ctrl+space` again to stop. The tray icon turns yellow while transcribing.
 6. A moment later the text is typed into your active window.
+
+---
+
+## Building & Updating the Installer
+
+This section is for **developers** who need to produce a fresh `VoiceTyperSetup.exe` after making code changes.
+
+### One-time setup
+
+You need two tools installed on the build machine (both are free):
+
+1. **Python 3.11 + venv** — set up as described in the [Installation](#installation) section above.
+2. **[Inno Setup 6](https://jrsoftware.org/isdl.php)** — download and install with default options. The build step below expects it at the default path `C:\Program Files (x86)\Inno Setup 6\ISCC.exe`.
+
+### Step 1 — Build the EXE bundle with PyInstaller
+
+From the repo root, run:
+
+```bash
+build\build.bat
+```
+
+This will:
+
+- Install PyInstaller into your venv if it's not already there.
+- Bundle `main.py` and all dependencies into `dist\VoiceTyper\` (folder mode).
+- The standalone EXE lives at `dist\VoiceTyper\VoiceTyper.exe`.
+
+You can test the app by double-clicking `dist\VoiceTyper\VoiceTyper.exe` directly before proceeding.
+
+### Step 2 — Package into an installer with Inno Setup
+
+**Option A — GUI:** Open `build\installer.iss` in Inno Setup Compiler and click **Compile** (or press `Ctrl+F9`).
+
+**Option B — Command line:**
+
+```bash
+"C:\Program Files (x86)\Inno Setup 6\ISCC.exe" build\installer.iss
+```
+
+This produces `dist\VoiceTyperSetup.exe` — a single installer file you can share with anyone.
+
+The installer will:
+
+- Copy files to `C:\Users\<user>\AppData\Local\Programs\Voice Typer\` (no admin required)
+- Create a **Start Menu** shortcut
+- Optionally create a **Desktop** shortcut
+- Optionally register to **start on Windows login**
+- Add an entry in **Add/Remove Programs** with a clean uninstaller
+
+### Updating after code changes
+
+Whenever you change the Python source code:
+
+1. Run `build\build.bat` again (PyInstaller reuses its cache, so rebuilds are fast).
+2. Run the Inno Setup compile again (Step 2 above).
+3. Distribute the new `dist\VoiceTyperSetup.exe`.
+
+That's it — two commands to go from code change to distributable installer.
+
+### Bumping the version number
+
+Edit the version in `build\installer.iss`:
+
+```ini
+#define MyAppVersion   "1.0.0"   ; ← change this
+```
+
+This controls what shows in Add/Remove Programs and the installer title bar.
+
+---
 
 ## Configuration & Settings
 

@@ -23,7 +23,10 @@ Desktop.ini
 
 # Build / dist
 dist/
-build/
+build/temp/
+build/*.spec
+!build/build.bat
+!build/installer.iss
 *.egg-info/
 
 # Hugging Face cache
